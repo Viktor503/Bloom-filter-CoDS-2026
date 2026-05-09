@@ -1,3 +1,6 @@
+from math import ceil
+
+
 class Hasher:
     """
     Class Responsible for hashing input data
@@ -28,7 +31,7 @@ class BloomFilter:
     def __init__(self, size, hashes_num):
         self.size = size
         self.hashes_num = hashes_num
-        self.data = [0]*size
+        self.data = bytearray(ceil(size / 8))
         self._insert_count = 0
         self.hasher = Hasher(hashes_num=hashes_num, size=size)
 
@@ -39,7 +42,11 @@ class BloomFilter:
         Args:
             element (str): element we want to store
         """
-        raise NotImplementedError()
+        positions = self.hasher.get_positions(element)
+        for position in positions:
+            element_bit = 1 << (position % 8)
+            self.data[-position//8] |= element_bit
+        self._insert_count += 1
 
     def search(self, element: str) -> bool:
         """
@@ -50,7 +57,12 @@ class BloomFilter:
         Returns:
             bool: returns if item is probably included in the bloom filter
         """
-        raise NotImplementedError()
+        positions = self.hasher.get_positions(element)
+        for position in positions:
+            element_bit = 1 << (position % 8)
+            if not self.data[-position//8] & element_bit:
+                return False
+        return True
 
     def __repr__(self) -> str:
         """
@@ -59,4 +71,33 @@ class BloomFilter:
         Returns:
             str: bloom filter summary string
         """
-        raise NotImplementedError()
+        return (
+            f"*****\n"
+            f"BloomFilter:\n"
+            f"size: {self.size}\n"
+            f"num_hashes: {self.hashes_num}\n"
+            f"inserted items: {self._insert_count}\n"
+            f"*****"
+        )
+
+    def data_binary(self) -> str:
+        """Returns the data in a binary string matrix
+
+        Returns:
+            str: The returned bytearray as bits
+        """
+        return '_'.join([format(x, "08b") for x in self.data])
+
+
+if __name__ == "__main__":
+    bf = BloomFilter(10, 2)
+    print(bf)
+    bf.insert("test")
+    print(bf.data_binary())
+    bf.insert("test2")
+    bf.insert("test3")
+    print(bf.data_binary())
+    print(bf.search("test"))
+    print(bf.search("test2"))
+    print(bf.search("test3"))
+    print(bf.search("test4"))
