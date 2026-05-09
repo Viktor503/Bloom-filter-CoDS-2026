@@ -1,3 +1,6 @@
+from math import ceil
+
+
 class Hasher:
     """
     Class Responsible for hashing input data
