@@ -44,7 +44,7 @@ class BloomFilter:
         """
         positions = self.hasher.get_positions(element)
         for position in positions:
-            element_bit = 1 << (position % 8 )
+            element_bit = 1 << (position % 8)
             self.data[-position//8] |= element_bit
         self._insert_count += 1
 
@@ -59,7 +59,7 @@ class BloomFilter:
         """
         positions = self.hasher.get_positions(element)
         for position in positions:
-            element_bit = 1 << (position % 8 )
+            element_bit = 1 << (position % 8)
             if not self.data[-position//8] & element_bit:
                 return False
         return True
@@ -79,19 +79,18 @@ class BloomFilter:
             f"inserted items: {self._insert_count}\n"
             f"*****"
         )
-    
+
     def data_binary(self) -> str:
         """Returns the data in a binary string matrix
 
         Returns:
             str: The returned bytearray as bits
         """
-        return '_'.join([format(x,"08b") for x in self.data])
-
+        return '_'.join([format(x, "08b") for x in self.data])
 
 
 if __name__ == "__main__":
-    bf = BloomFilter(10,2)
+    bf = BloomFilter(10, 2)
     print(bf)
     bf.insert("test")
     print(bf.data_binary())
