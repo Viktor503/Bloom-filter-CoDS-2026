@@ -46,23 +46,30 @@ class BloomFilter:
     Bloom filter class
     """
 
-    def __init__(self, size, hashes_num):
-        self.size = size
-        self.hashes_num = hashes_num
-        self.data = [0]*size
+    def __init__(self, m:int, k:int):
+        self.m = m
+        self.k = k
+        self.data = [0]*m
         self._insert_count = 0
-        self.hasher = Hasher(hashes_num=hashes_num, size=size)
+        
 
-    def insert(self, element: str):
+    def add_entry(self, element:str):
+
+        """ This function stores hashed elements in self.data.
+            Args:
+                element (str): the element we want to store
         """
-        Hash element and store results in self.data
+        if isinstance(element, str):
+            element = element.encode("utf-8")
+        hashnum = hashlib.md5(element).hexdigest()
+        h1 = int(hashnum[:16], 16)
+        h2 = int(hashnum[16:], 16)
+        for i in range(self.k):
+            index = (h1 + i*h2)%self.m
+            self.data[index] = 1
+            self._insert_count += 1           
 
-        Args:
-            element (str): element we want to store
-        """
-        raise NotImplementedError()
-
-    def search(self, element: str) -> bool:
+    def find(self, element: str) -> bool:
         """
 
         Args:
@@ -71,7 +78,22 @@ class BloomFilter:
         Returns:
             bool: returns if item is probably included in the bloom filter
         """
-        raise NotImplementedError()
+        if isinstance(element, str):
+            element = element.encode("utf-8")
+        hashnum = hashlib.md5(element).hexdigest()
+        h1 = int(hashnum[:16], 16)
+        h2 = int(hashnum[16:], 16)
+        indices = []
+        for i in range(self.k):
+            index =  (h1 + i*h2)%self.m
+            indices.append(index)
+        for y in indices:
+            if self.data[y] == 1:
+                prob = (1.0 - ((1.0 - 1.0/self.m)**(self.k*self._insert_count))) ** self.k
+                return "Might be in bloom filter with a false positive probability of " + str(prob)
+        return "Not found in bloom filter"
+
+    
 
     def __repr__(self) -> str:
         """
