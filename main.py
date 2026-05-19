@@ -1,5 +1,6 @@
 from math import ceil
 
+import hashlib
 
 class Hasher:
     """
@@ -10,17 +11,26 @@ class Hasher:
         self.hashes_num = hashes_num
         self.size = size
 
-    def get_positions(self, item: str) -> list[int]:
+    def get_positions(self, value: str) -> list[int]:
         """
         Implements item hashing with self.hashes_num hash functions
 
         Args:
-            item (str): the item we are hashing
+            value (str): the item we are hashing
 
         Returns:
             list[int]: output results of the hash
         """
-        raise NotImplementedError()
+        if isinstance(value, str):
+            value = value.encode("utf-8")
+        hashnum = hashlib.md5(value).hexdigest()
+        h1 = int(hashnum[:16], 16)
+        h2 = int(hashnum[16:], 16)
+        indices = []
+        for i in range(self.hashes_num):
+            index = (h1 + i*h2)%self.size
+            indices.append(index)
+        return indices
 
 
 class BloomFilter:
