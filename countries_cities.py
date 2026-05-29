@@ -5,7 +5,7 @@ import pandas as pd
 cities = pd.read_csv("data/worldcities.csv")
 
 
-cities_string = list(names.admin_name)
+cities_string = list(cities.admin_name)
 
 size = list(range(1000, len(cities.index), 100))
 
