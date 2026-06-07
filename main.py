@@ -96,7 +96,12 @@ class BloomFilter:
         Returns:
             str: The returned bytearray as bits
         """
-        return '_'.join([format(x, "08b") for x in self.data])
+        return "_".join([format(x, "08b") for x in self.data])
+
+    def false_positive_rate(self) -> float:
+        return (
+            1 - ((1 - 1 / self.size) ** (self.hashes_num * self._insert_count))
+        ) ** self.hashes_num
 
 
 if __name__ == "__main__":
