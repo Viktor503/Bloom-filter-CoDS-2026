@@ -29,3 +29,16 @@ cd Bloom-filter-CoDS-2026
 conda env create -f environment.yml -n bloom_filter
 conda activate bloom_filter
 ```
+
+
+## Time and space complexity 
+
+
+Let n be the size of the bloom filter array
+Let m be the number of hash functions used
+
+The time complexity of the get_positions function is O(m) since we need to compute m hash values for the input element.
+The time complexity of insertion is also O(m) since we call get_positions and then set m bits in the bloom filter array. Giving us O(m)+O(m) = O(m)
+The time complexity of the search function is also O(m) we first call get_positions to get the relevant bit positions and loopthrough them giving us O(m) + O(m) = O(m)
+
+The space complexity of the bloom filter is O(n) because we need to store n bits.

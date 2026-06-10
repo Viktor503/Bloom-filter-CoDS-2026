@@ -158,6 +158,8 @@ def plot_fpr(
 
 
 if __name__ == "__main__":
+
+    # Test with natutal language words 
     cities = pd.read_csv("data/worldcities.csv")
 
     cities_string = list(cities.admin_name1)
@@ -172,6 +174,27 @@ if __name__ == "__main__":
         test_nums=[1000],
     )
     b.run_experiment()
+
+    plot_time()
+    plot_fpr()
+
+    # Test with random string of data
+
+     # Test with natutal language words 
+    df_strings = pd.read_csv("data/random_strings.csv")
+
+    strings_list = list(df_strings.strings)
+    
+    print(len(strings_list))  # total rows
+    print(len(set(strings_list)))  # unique values
+    r = Benchmark(
+        data=strings_list,
+        sizes=[1000, 5000, 10000],
+        hash_funcs=[1, 2, 3],
+        insert_nums=list(range(100, 2000, 100)),
+        test_nums=[1000],
+    )
+    r.run_experiment()
 
     plot_time()
     plot_fpr()
