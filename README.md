@@ -23,11 +23,11 @@ cd Bloom-filter-CoDS-2026
 ```
 
 
-## Setup conda environment
+
+## Running the slurm job
 
 ```bash
-conda env create -f environment.yml -n bloom_filter
-conda activate bloom_filter
+sbatch benchmark.slurm
 ```
 
 
