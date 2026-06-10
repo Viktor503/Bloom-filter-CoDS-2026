@@ -106,6 +106,7 @@ def plot_time(
     plt.legend()
     plt.savefig("insert_time.png")
     plt.show()
+    plt.clf()
 
     # search_time vs insertnum + hash_func
     for hash_func_num in hash_func_nums:
@@ -122,6 +123,7 @@ def plot_time(
     plt.legend()
     plt.savefig("search_time.png")
     plt.show()
+    plt.clf()
 
 
 def plot_fpr(
@@ -155,11 +157,11 @@ def plot_fpr(
     plt.legend()
     plt.savefig("fpr_plot.png")
     plt.show()
+    plt.clf()
 
 
 if __name__ == "__main__":
-
-    # Test with natutal language words 
+    # Test with natutal language words
     cities = pd.read_csv("data/worldcities.csv")
 
     cities_string = list(cities.admin_name1)
@@ -180,11 +182,11 @@ if __name__ == "__main__":
 
     # Test with random string of data
 
-     # Test with natutal language words 
+    # Test with natutal language words
     df_strings = pd.read_csv("data/random_strings.csv")
 
     strings_list = list(df_strings.strings)
-    
+
     print(len(strings_list))  # total rows
     print(len(set(strings_list)))  # unique values
     r = Benchmark(
