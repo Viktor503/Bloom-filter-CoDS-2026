@@ -1,6 +1,6 @@
 #!/bin/bash -l
 #SBATCH --cluster=genius
-#SBATCH --account=intro_vsc38839
+#SBATCH --account=$VSC_ACCOUNT
 #SBATCH --time=00:15:00
 #SBATCH --partition=batch_skylake
 
